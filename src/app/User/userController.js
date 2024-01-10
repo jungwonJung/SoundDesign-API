@@ -4,29 +4,21 @@ const {
   checkEmail,
   loginUser,
   comparePasswordAndGenerateToken,
+  confirmEmail
 } = require("./userService");
 
-// const nodemailer = require("nodemailer"); //
+const {sendVerificationEmail} = require("../../middleware/emailMiddleware")
 
-// const transporter = nodemailer.createTransport({
-//   service: "gmail",
-//   auth: {
-//     user: "bodercoding@gmail.com",
-//     pass: "your-gmail-password",
-//   },
-// });
 
 const userController = {
   create: async (req, res) => {
     const { accountEmail, accountPw, accountName } = req.body;
 
-    console.log(req.body);
-
     if (!accountEmail || !accountPw || !accountName)
       return response.send("should write whole info");
 
     try {
-      if (checkEmail(accountEmail)) {
+      if (await checkEmail(accountEmail)) {
         return res.send("already has same email");
       } else {
         const user = await createUser({
@@ -37,33 +29,23 @@ const userController = {
 
         res.send([user]);
 
-        // var mailOption = {
-        //   from: "bodercoding@gmail.com",
-        //   to: user.accountEmail,
-        //   subject: "이메일 인증해주세요",
-        //   html:
-        //     "<p>아래의 링크를 클릭해서 인증해주세요!</p>" +
-        //     "<a href='https://jungganzi.xyz/api/confirm/account" +
-        //     "?email=" +
-        //     user.accountEmail +
-        //     " '>인증하기</a>",
-        // };
-        // transporter.sendMail(mailOption, function (err, res) {
-        //   // 메일 발송
-        //   if (err) {
-        //     console.log(err);
-        //   } else {
-        //     console.log("이메일발송성공");
-        //   }
-        //   transporter.close();
-        // });
+        sendVerificationEmail(user.accountEmail)
       }
     } catch (error) {
       console.error("Error creating user:", error);
       res.status(500).send("Error creating user");
     }
   },
-  confirm: (req, res) => {},
+  confirm:  async (req, res) => {
+    try {
+      const { email } = req.query;
+      await confirmEmail(email);
+      res.send('<script type="text/javascript">alert("Successfully verified"); window.location="http://localhost:3000"; </script>');
+    } catch (error) {
+      console.log(error);
+      res.status(500).send('Error confirming email');
+    }
+  },
   login: async (req, res) => {
     const { accountEmail, accountPw } = req.body;
     if (!accountEmail || !accountPw)

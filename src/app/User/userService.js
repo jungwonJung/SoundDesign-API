@@ -22,7 +22,25 @@ const loginUser = async ({ accountEmail, isAcceptEmail }) => {
 };
 
 const checkEmail = async ({ accountEmail }) => {
-  return await User.findOne(accountEmail);
+  try {
+    const user = await User.findOne({ accountEmail });
+    return user;
+  } catch (error) {
+    console.error("duplicate error", error);
+    throw error; // Re-throw the error to handle it in the calling code
+  }
+};
+
+const confirmEmail = async (email) => {
+  try {
+    const user = await User.updateOne(
+      { accountEmail: email },
+      { $set: { isAcceptEmail: true } }
+    );
+    return user;
+  } catch (error) {
+    throw error;
+  }
 };
 
 const comparePasswordAndGenerateToken = async (
@@ -79,6 +97,7 @@ module.exports = {
   loginUser,
   createUser,
   checkEmail,
+  confirmEmail,
   validateSignup,
   validateSignupResult,
   comparePasswordAndGenerateToken,
