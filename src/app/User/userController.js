@@ -1,5 +1,12 @@
 const User = require("../../../config/db/user_model");
-// const nodemailer = require("nodemailer"); // nodemailer를 import한 부분이 없어서 추가
+const {
+  createUser,
+  checkEmail,
+  loginUser,
+  comparePasswordAndGenerateToken,
+} = require("./userService");
+
+// const nodemailer = require("nodemailer"); //
 
 // const transporter = nodemailer.createTransport({
 //   service: "gmail",
@@ -13,32 +20,24 @@ const userController = {
   create: async (req, res) => {
     const { accountEmail, accountPw, accountName } = req.body;
 
-    const user = new User();
-
-    // if (checkUser)
-    //     return response.send("3588")
-
-    user.accountEmail = accountEmail;
-    user.accountPw = accountPw;
-    user.accountName = accountName;
-    user.created = Date.now();
-    user.updated = Date.now();
+    console.log(req.body);
 
     if (!accountEmail || !accountPw || !accountName)
-      return response.send("9176"); // message: "모든 항목입력주세요"
+      return response.send("should write whole info");
 
     try {
-      const existingUser = await User.findOne({ accountEmail: accountEmail });
-
-      if (existingUser) {
-        return res.send("3588");
+      if (checkEmail(accountEmail)) {
+        return res.send("already has same email");
       } else {
-        await user.save();
+        const user = await createUser({
+          accountEmail,
+          accountPw,
+          accountName,
+        });
+
         res.send([user]);
 
-        // 회원가입과 동시에 가입 이메일로 메일 전송 user_models 에 Schema.pre 설정함
         // var mailOption = {
-        //   // 메일 옵션  설정
         //   from: "bodercoding@gmail.com",
         //   to: user.accountEmail,
         //   subject: "이메일 인증해주세요",
@@ -65,7 +64,33 @@ const userController = {
     }
   },
   confirm: (req, res) => {},
-  login: (req, res) => {},
+  login: async (req, res) => {
+    const { accountEmail, accountPw } = req.body;
+    if (!accountEmail || !accountPw)
+      return res.send("should write with whole info");
+
+    const user = await loginUser(accountEmail, true);
+    if (user) {
+      try {
+        const tokenData = await comparePasswordAndGenerateToken(
+          accountPw,
+          user.accountPw,
+          user._id,
+          accountEmail,
+          user.accountName
+        );
+
+        res.status(200).json({ token: tokenData.token });
+      } catch (error) {
+        console.error(
+          `Error during password comparison and token generation: ${error.message}`
+        );
+        res.status(500).json({ message: "Internal server error." });
+      }
+    } else {
+      res.send("different email or something wrong");
+    }
+  },
   tokentest: (req, res) => {},
   tokenprofile: (req, res) => {},
   updateProfile: (req, res) => {},

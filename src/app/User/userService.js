@@ -1,4 +1,59 @@
 const { check, validationResult } = require("express-validator");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
+
+const User = require("../../../config/db/user_model");
+
+const createUser = async ({ accountEmail, accountPw, accountName }) => {
+  const user = new User({
+    accountEmail,
+    accountPw,
+    accountName,
+    created: Date.now(),
+    updated: Date.now(),
+  });
+
+  return user.save();
+};
+
+const loginUser = async ({ accountEmail, isAcceptEmail }) => {
+  return await User.findOne(accountEmail, isAcceptEmail);
+};
+
+const checkEmail = async ({ accountEmail }) => {
+  return await User.findOne(accountEmail);
+};
+
+const comparePasswordAndGenerateToken = async (
+  enteredPassword,
+  storedPassword,
+  userId,
+  email,
+  accountName
+) => {
+  try {
+    const passwordMatch = await bcrypt.compare(enteredPassword, storedPassword);
+
+    if (passwordMatch) {
+      const token = jwt.sign({ user: userId }, process.env.MY_SECRET_KEY, {
+        subject: "Sound Design jwtoken",
+        expiresIn: "1440m",
+      });
+
+      return await {
+        token,
+        accountEmail: email,
+        accountName,
+        accountId: userId,
+      };
+    } else {
+      throw new Error("Password does not match.");
+    }
+  } catch (error) {
+    throw new Error(`Error comparing passwords: ${error.message}`);
+  }
+};
 
 const validateSignup = [
   check("accountEmail").isEmail().withMessage("Wrong Email Address"),
@@ -20,4 +75,11 @@ const validateSignupResult = (req, res, next) => {
   }
 };
 
-module.exports = { validateSignup, validateSignupResult };
+module.exports = {
+  loginUser,
+  createUser,
+  checkEmail,
+  validateSignup,
+  validateSignupResult,
+  comparePasswordAndGenerateToken,
+};

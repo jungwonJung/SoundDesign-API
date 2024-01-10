@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
-
-require("dotenv").config({ path: ".env" });
+require("dotenv").config();
 
 exports.mongoDB = () => {
   mongoose

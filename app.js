@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const swaggerJsdoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
+const cors = require("cors");
 
 const app = express();
 const { mongoDB } = require("./config/db/db.js");
@@ -9,6 +10,8 @@ const port = 3000;
 
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
+
+app.use(cors());
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
