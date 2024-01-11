@@ -1,13 +1,13 @@
-const User = require("../../../config/db/user_model");
+
 const {
   createUser,
   checkEmail,
   loginUser,
   comparePasswordAndGenerateToken,
-  confirmEmail
 } = require("./userService");
 
 const {sendVerificationEmail} = require("../../middleware/emailMiddleware")
+
 
 
 const userController = {
@@ -19,6 +19,7 @@ const userController = {
 
     try {
       if (await checkEmail(accountEmail)) {
+
         return res.send("already has same email");
       } else {
         const user = await createUser({
@@ -36,16 +37,7 @@ const userController = {
       res.status(500).send("Error creating user");
     }
   },
-  confirm:  async (req, res) => {
-    try {
-      const { email } = req.query;
-      await confirmEmail(email);
-      res.send('<script type="text/javascript">alert("Successfully verified"); window.location="http://localhost:3000"; </script>');
-    } catch (error) {
-      console.log(error);
-      res.status(500).send('Error confirming email');
-    }
-  },
+
   login: async (req, res) => {
     const { accountEmail, accountPw } = req.body;
     if (!accountEmail || !accountPw)
@@ -64,17 +56,13 @@ const userController = {
 
         res.status(200).json({ token: tokenData.token });
       } catch (error) {
-        console.error(
-          `Error during password comparison and token generation: ${error.message}`
-        );
-        res.status(500).json({ message: "Internal server error." });
+        res.status(409).json({ message: `Incorrect password, login failed: ${error.message}` });
       }
     } else {
       res.send("different email or something wrong");
     }
   },
-  tokentest: (req, res) => {},
-  tokenprofile: (req, res) => {},
+  tokenProfile: (req, res) => {},
   updateProfile: (req, res) => {},
   img_path: (req, res) => {},
 };

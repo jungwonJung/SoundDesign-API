@@ -16,7 +16,7 @@ const sendVerificationEmail = (toEmail) => {
     subject: "Please verify your email",
     html:
       "<p>Please click the link below to authenticate</p>" +
-      "<a href='http://localhost:3000/api/user/confirm" +
+      "<a href='http://localhost:3000/api/email/confirm" +
       "?email=" +
       toEmail +
       " '>Verify</a>",

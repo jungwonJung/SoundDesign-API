@@ -10,24 +10,18 @@ router.post(
   userController.create
 );
 
-// Confirm Email
-router.get("/user/confirm", userController.confirm);
-
 // User Login
 router.post("/user/login", userController.login);
 
-// Test Token
-router.get("/user/token/test", userController.tokentest);
-
 // Get User Profile Info
-router.get("/user/profile", userController.tokenprofile);
+router.get("/user/profile", userController.tokenProfile);
 
 // Update User Profile with Token
-router.patch("/user/profile/update", userController.updateProfile);
+router.patch("/user/profile", userController.updateProfile);
 
 // Get User Profile Image by Filename
 router.get("/user/profile/img/:filename", userController.img_path);
 
 module.exports = router;
 
-module.exports = router;
+

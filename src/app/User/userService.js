@@ -21,27 +21,30 @@ const loginUser = async ({ accountEmail, isAcceptEmail }) => {
   return await User.findOne(accountEmail, isAcceptEmail);
 };
 
-const checkEmail = async ({ accountEmail }) => {
+const checkEmail = async ( accountEmail ) => {
   try {
-    const user = await User.findOne({ accountEmail });
+    const user = await User.findOne({ accountEmail:accountEmail });
     return user;
   } catch (error) {
-    console.error("duplicate error", error);
-    throw error; // Re-throw the error to handle it in the calling code
+    console.error("Something wrong with check Email", error);
+    throw error; 
   }
 };
 
-const confirmEmail = async (email) => {
+const getUserByToken = async (token) => {
   try {
-    const user = await User.updateOne(
-      { accountEmail: email },
-      { $set: { isAcceptEmail: true } }
-    );
-    return user;
+      const decodedToken =  tokenDecode(token)
+      if (decodedToken) {
+          const user = await User.findOne({ _id: decodedToken.user });
+          return user;
+      } else {
+          return null;
+      }
   } catch (error) {
-    throw error;
+      throw error;
   }
-};
+}
+
 
 const comparePasswordAndGenerateToken = async (
   enteredPassword,
@@ -95,10 +98,10 @@ const validateSignupResult = (req, res, next) => {
 
 module.exports = {
   loginUser,
-  createUser,
   checkEmail,
-  confirmEmail,
+  createUser,
   validateSignup,
+  getUserByToken,
   validateSignupResult,
   comparePasswordAndGenerateToken,
 };
