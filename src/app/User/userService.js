@@ -2,7 +2,7 @@ const { check, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 require("dotenv").config();
 
-const User = require("../../../config/db/user_model");
+const User = require("../../../config/db/models/userModel");
 const { tokenDecode } = require("../Token/tokenService");
 
 

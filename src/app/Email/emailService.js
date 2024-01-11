@@ -1,4 +1,4 @@
-const User = require("../../../config/db/user_model");
+const User = require("../../../config/db/models/userModel");
 
   const confirmEmail = async (email) => {
     try {
