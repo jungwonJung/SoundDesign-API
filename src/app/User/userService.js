@@ -1,9 +1,10 @@
 const { check, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 const User = require("../../../config/db/user_model");
+const { tokenDecode } = require("../Token/tokenService");
+
 
 const createUser = async ({ accountEmail, accountPw, accountName }) => {
   const user = new User({
@@ -17,7 +18,7 @@ const createUser = async ({ accountEmail, accountPw, accountName }) => {
   return user.save();
 };
 
-const loginUser = async ({ accountEmail, isAcceptEmail }) => {
+const findUserIsAccept = async ({ accountEmail, isAcceptEmail }) => {
   return await User.findOne(accountEmail, isAcceptEmail);
 };
 
@@ -33,9 +34,10 @@ const checkEmail = async ( accountEmail ) => {
 
 const getUserByToken = async (token) => {
   try {
-      const decodedToken =  tokenDecode(token)
+      const decodedToken = await tokenDecode(token)
+      console.log(decodedToken)
       if (decodedToken) {
-          const user = await User.findOne({ _id: decodedToken.user });
+          const user = await User.findOne({ _id: decodedToken._id });
           return user;
       } else {
           return null;
@@ -46,35 +48,15 @@ const getUserByToken = async (token) => {
 }
 
 
-const comparePasswordAndGenerateToken = async (
-  enteredPassword,
-  storedPassword,
-  userId,
-  email,
-  accountName
-) => {
+const comparePassword = async (enteredPassword, storedPassword) => {
   try {
     const passwordMatch = await bcrypt.compare(enteredPassword, storedPassword);
-
-    if (passwordMatch) {
-      const token = jwt.sign({ user: userId }, process.env.MY_SECRET_KEY, {
-        subject: "Sound Design jwtoken",
-        expiresIn: "1440m",
-      });
-
-      return await {
-        token,
-        accountEmail: email,
-        accountName,
-        accountId: userId,
-      };
-    } else {
-      throw new Error("Password does not match.");
-    }
+    return passwordMatch;
   } catch (error) {
     throw new Error(`Error comparing passwords: ${error.message}`);
   }
 };
+
 
 const validateSignup = [
   check("accountEmail").isEmail().withMessage("Wrong Email Address"),
@@ -97,11 +79,12 @@ const validateSignupResult = (req, res, next) => {
 };
 
 module.exports = {
-  loginUser,
+  findUserIsAccept,
   checkEmail,
   createUser,
   validateSignup,
   getUserByToken,
+  comparePassword,
   validateSignupResult,
-  comparePasswordAndGenerateToken,
+
 };

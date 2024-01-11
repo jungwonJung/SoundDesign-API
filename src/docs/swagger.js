@@ -1,7 +1,7 @@
 /**
  * @swagger
  * tags:
- *   - name: Account
+ *   - name: User
  *   - name: Sound
  *   - name: Like
  *   - name: Email
@@ -13,7 +13,7 @@
  *    /api/user:
  *      post:
  *        tags:
- *        - "Account"
+ *        - "User"
  *        summary: "User registration"
  *        description: "The user registration API requires input for three parameters: user ID (email), password, and nickname."
  *        consumes:
@@ -52,7 +52,7 @@
  *    /api/user/login:
  *      post:
  *        tags:
- *        - "Account"
+ *        - "User"
  *        summary: "Login and receive a token"
  *        description: "Login API requires user's Email ID and password input."
  *        consumes:
@@ -139,4 +139,31 @@
  *          500:
  *            description: "[에러]서버에 문제가 있어 회원 가입에 실패하였습니다."
  */
-
+/**
+ * @swagger
+ *  paths:
+ *    /api/user/profile:
+ *      get:
+ *        tags:
+ *        - "User"
+ *        summary: "Get User Profile by Token"
+ *        description: "Get User Profile by Token API"
+ *        consumes:
+ *        - "application/json"
+ *        produces:
+ *        - "application/json"
+ *        parameters:
+ *        - in: header
+ *          name: token
+ *          description: "JWT Token"
+ *          required: true
+ *          schema:
+ *            type: string
+ *        responses:
+ *          200:
+ *            description: "[Success] User profile retrieved successfully."
+ *          409:
+ *            description: "[Error] Invalid or expired token, unable to retrieve user profile."
+ *          500:
+ *            description: "[Error] Internal server error while retrieving user profile."
+ */

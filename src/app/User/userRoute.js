@@ -14,7 +14,7 @@ router.post(
 router.post("/user/login", userController.login);
 
 // Get User Profile Info
-router.get("/user/profile", userController.tokenProfile);
+router.get("/user/profile", userController.get);
 
 // Update User Profile with Token
 router.patch("/user/profile", userController.updateProfile);
