@@ -1,12 +1,13 @@
 
 const jwt = require('jsonwebtoken');
+const { TOKEN_SUBJECT, TOKEN_EXPRIE_TIME } = require('../../../config/config');
 require("dotenv").config();
 
 
-const generateToken = (userId) => {
+const tokenGenerate = (userId) => {
     const token = jwt.sign({ user: userId }, process.env.MY_SECRET_KEY, {
-      subject: 'Sound Design jwtoken',
-      expiresIn: '1440m',
+      subject: TOKEN_SUBJECT,
+      expiresIn: TOKEN_EXPRIE_TIME,
     });
     
     return {token : token};
@@ -21,5 +22,5 @@ const tokenDecode = async (token) => {
 
 module.exports = {
     tokenDecode,
-    generateToken
+    tokenGenerate
 }

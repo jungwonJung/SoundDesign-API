@@ -8,7 +8,7 @@ const {
 } = require("./userService");
 
 const {
-  generateToken,
+  tokenGenerate,
 } = require("../Token/tokenService")
 
 const {sendVerificationEmail} = require("../../middleware/emailMiddleware")
@@ -60,7 +60,7 @@ const userController = {
       const isPasswordMatch = await comparePassword(accountPw, user.accountPw);
   
       if (isPasswordMatch) {
-        const token = generateToken(user._id);
+        const token = tokenGenerate(user._id);
         return res.status(200).json({ token: token.token });
       } else {
         return res.status(401).json({ message: "Incorrect password, login failed." });
