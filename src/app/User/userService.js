@@ -35,7 +35,6 @@ const checkEmail = async ( accountEmail ) => {
 const getUserByToken = async (token) => {
   try {
       const decodedToken = await tokenDecode(token)
-      console.log(decodedToken)
       if (decodedToken) {
           const user = await User.findOne({ _id: decodedToken._id });
           return user;
@@ -46,6 +45,15 @@ const getUserByToken = async (token) => {
       throw error;
   }
 }
+
+const updateUserProfile = async (user, accountName, filePath) => {
+  const data = {};
+
+  if (accountName) data.accountName = accountName;
+  if (filePath) data.accountImg = filePath;
+
+  return User.updateOne(user, data);
+};
 
 
 const comparePassword = async (enteredPassword, storedPassword) => {
@@ -85,6 +93,7 @@ module.exports = {
   validateSignup,
   getUserByToken,
   comparePassword,
+  updateUserProfile,
   validateSignupResult,
 
 };
