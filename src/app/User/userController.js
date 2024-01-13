@@ -118,7 +118,7 @@ const userController = {
   
       let filePath = null;
       if (userImg) {
-        filePath = await processFileUpload(userImg);
+        filePath = await processFileUpload(userImg, false);
       }
   
       const update = await updateUserProfile(user, accountName, filePath);

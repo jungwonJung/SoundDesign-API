@@ -13,7 +13,7 @@ const soundController = {
 
             if(!soundfile) return req.send("Pleas upload the Sound File.")
             
-            const filePath = await processFileUpload(soundfile);
+            const filePath = await processFileUpload(soundfile, true);
             const soundData = {
                 soundName,
                 category,
@@ -22,7 +22,7 @@ const soundController = {
                 filePath,
             }
 
-            const sound = await createSound(savestatus);
+            const sound = await createSound(soundData);
             return res.send({
                 result: "File Susccesfully uploaded.",
                 sound,
