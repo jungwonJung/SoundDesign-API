@@ -21,7 +21,7 @@ router.get("/user/profile", userController.get);
 router.patch("/user/profile", upload, userController.updateProfile);
 
 // Get User Profile Image by Filename
-router.get("/user/profile/img/:filename", userController.img_path);
+router.get("/user/profile/img/:filename", userController.imgPath);
 
 module.exports = router;
 

@@ -110,7 +110,7 @@ const userController = {
       const { accountName } = req.body;
       const userImg = req.file
 
-      // console.log(userImg)
+ 
 
       if (!accountName && !userImg) {
         return res.send("7777"); // No updates provided
@@ -134,7 +134,7 @@ const userController = {
     }
   },
 
-  img_path: async (req, res) => {
+  imgPath: async (req, res) => {
     const { filename } = req.params;
     const filePath = path.resolve(__dirname, "../../../profiles/" + filename );
 

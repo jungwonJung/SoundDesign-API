@@ -32,5 +32,5 @@ const soundSchema = new mongoose.Schema({
     },
 })
 
-
-module.exports = mongoose.model('Sound',soundSchema )
+mongoose.model("Sound", soundSchema);
+module.exports = mongoose.model("Sound");
