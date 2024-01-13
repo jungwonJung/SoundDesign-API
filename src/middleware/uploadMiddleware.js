@@ -1,31 +1,34 @@
-// file upload middle ware
 const multer = require('multer');
 const sharp = require('sharp');
 
+
+
 const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
+const upload = multer({ storage: storage, limits:{fileSize: 10 * 1024 * 1024} }).single('userImg');
 
 const processFileUpload = async (userImg) => {
-  if (!userImg) return null;
+    if (!userImg) return null;
 
-  const filename = userImg.originalname;
-  const filePath = `http://localhost:3000/api/user/profile/img/thumbnail_${filename}`;
+    const filename = userImg.originalname;
+    const encodedFilename = encodeURIComponent(filename);
 
-  await sharp(userImg.buffer)
-    .resize(250, 250)
-    .jpeg({ quality: 100 })
-    .toFile(`./profiles/thumbnail_${filename}`);
+    
+    const thumbnailFilePath = `http://localhost:3000/api/user/profile/img/thumbnail_${encodedFilename}`;
 
-  const removepath = './profiles/' + filename;
+    
+    const sanitizedFilename = encodedFilename.replace(/[/\\?%*:|"<>]/g, '');
 
-  fs.unlink(removepath, (err) => {
-    if (err) {
-      console.log(err);
-      return;
+    try {
+        
+        await sharp(userImg.buffer)
+            .resize(250, 250)
+            .jpeg({ quality: 100 })
+            .toFile(`./profiles/thumbnail_${sanitizedFilename}`);
+    } catch (err) {
+        console.error(`Error processing file:`, err);
     }
-  });
 
-  return filePath;
+    return thumbnailFilePath;
 };
 
 module.exports = { upload, processFileUpload };

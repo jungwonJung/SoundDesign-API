@@ -1,3 +1,4 @@
+const path = require('path');
 
 const {
   createUser,
@@ -12,7 +13,8 @@ const {
   tokenGenerate,
 } = require("../Token/tokenService")
 
-const {sendVerificationEmail} = require("../../middleware/emailMiddleware")
+const {sendVerificationEmail} = require("../../middleware/emailMiddleware");
+const { processFileUpload } = require("../../middleware/uploadMiddleware");
 
 
 
@@ -97,28 +99,30 @@ const userController = {
     }
   },
   updateProfile: async (req, res) => {
-    const { accountName } = req.body;
-    const userImg = req.file;
-
     try {
       const token = req.headers.token;
       const user = await getUserByToken(token);
-
+  
       if (!user) {
         return res.status(401).json({ message: "Invalid or expired token." });
       }
+  
+      const { accountName } = req.body;
+      const userImg = req.file
+
+      // console.log(userImg)
 
       if (!accountName && !userImg) {
         return res.send("7777"); // No updates provided
       }
-
+  
       let filePath = null;
       if (userImg) {
         filePath = await processFileUpload(userImg);
       }
-
+  
       const update = await updateUserProfile(user, accountName, filePath);
-
+  
       return res.send(update);
     } catch (error) {
       console.error("Error in updateProfile:", error);
@@ -130,7 +134,13 @@ const userController = {
     }
   },
 
-  img_path: (req, res) => {},
-};
+  img_path: async (req, res) => {
+    const { filename } = req.params;
+    const filePath = path.resolve(__dirname, "../../../profiles/" + filename );
+
+    return res.sendFile(filePath)
+  }
+  
+}
 
 module.exports = userController;

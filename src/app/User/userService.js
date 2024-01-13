@@ -52,7 +52,7 @@ const updateUserProfile = async (user, accountName, filePath) => {
   if (accountName) data.accountName = accountName;
   if (filePath) data.accountImg = filePath;
 
-  return User.updateOne(user, data);
+  return await User.updateOne(user, data);
 };
 
 

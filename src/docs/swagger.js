@@ -167,3 +167,39 @@
  *          500:
  *            description: "[Error] Internal server error while retrieving user profile."
  */
+/**
+ * @swagger
+ *  paths:
+ *    /api/user/profile:
+ *      patch:
+ *        tags:
+ *        - "User"
+ *        summary: "Update Profile Img, name"
+ *        description: "Update Profile API, Profile Img, Name"
+ *        consumes:
+ *        - "multipart/form-data"
+ *        produces:
+ *        - "application/json"
+ *        parameters:
+ *        - in: "header"
+ *          name: "token"
+ *          description: "jwt Token"
+ *          type: string
+ *          required: true
+ *          schema:
+ *            type: string
+ *        requestBody:
+ *          content:
+ *            multipart/form-data:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  userImg:
+ *                    type: string
+ *                    format: binary
+ *                  accountName:
+ *                    type: string
+ *        responses:
+ *          200:
+ *            description: "[완료]업로드가 성공 되었습니다."
+ */
