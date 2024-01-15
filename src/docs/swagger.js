@@ -89,7 +89,7 @@
  *      get:
  *        tags:
  *        - "Email"
- *        summary: "Can Confirm Email without email"
+ *        summary: "Can Confirm Email without verified email"
  *        description: "Confirm email without verifying Email."
  *        consumes:
  *        - "application/json"
@@ -127,18 +127,17 @@
  *        parameters:
  *        - in: "header"
  *          name: "token"
- *          description: "jwt Token"
+ *          description: "JWT Token"
  *          required: true
  *          schema:
  *            type: string
  *        responses:
  *          200:
- *            description: "[완료]가입이 정상적으로 완료되었습니다."
- *          409:
- *            description: "[에러]사용자 아이디가 이미 존재하여 회원 가입이 실패하였습니다."
+ *            description: "[Success] Token decoded successfully."
  *          500:
- *            description: "[에러]서버에 문제가 있어 회원 가입에 실패하였습니다."
+ *            description: "[Error] There was a problem with the server, and decoding the token failed."
  */
+
 /**
  * @swagger
  *  paths:
@@ -201,7 +200,7 @@
  *                    type: string
  *        responses:
  *          200:
- *            description: "[완료]업로드가 성공 되었습니다."
+ *            description: "[Success]Profile modification completed successfully."
  */
 /**
  * @swagger
@@ -211,7 +210,7 @@
  *        tags:
  *        - "Sound"
  *        summary: "File Upload API for Sound"
- *        description: "파일 업로드시 사용되는 API 입니다."
+ *        description: "Sound File Upload API"
  *        consumes:
  *        - "multipart/form-data"
  *        produces:
@@ -246,7 +245,7 @@
  *                    maxItems: 5
  *        responses:
  *          200:
- *            description: "[완료] 업로드가 성공되었습니다."
+ *            description: "[Success] File uploaded Complete"
  */
 /**
  * @swagger
@@ -255,8 +254,8 @@
  *      delete:
  *        tags:
  *        - "Sound"
- *        summary: ""
- *        description: "내 Sound 삭제 하기 api"
+ *        summary: "Delete Sound File"
+ *        description: "Delete Sound file API"
  *        consumes:
  *        - "application/json"
  *        produces:
@@ -280,5 +279,56 @@
  *                    type: string
  *        responses:
  *          200:
- *            description: "[완료] 업로드가 성공 되었습니다."
+ *            description: "[Success] Delete Sound file is completed."
+ */
+/**
+ * @swagger
+ *  paths:
+ *    /api/sound:
+ *      get:
+ *        tags:
+ *        - "Sound"
+ *        summary: "Get Sounds List"
+ *        description: "Get Sounds List API"
+ *        consumes:
+ *        - "application/json"
+ *        produces:
+ *        - "application/json"
+ *        parameters:
+ *        - in: "query"
+ *          name: "page"
+ *          schema:
+ *            type: string
+
+ *        responses:
+ *          200:
+ *            description: "result"
+ */
+/**
+ * @swagger
+ *  paths:
+ *    /api/sound/my:
+ *      get:
+ *        tags:
+ *        - "Sound"
+ *        summary: "Get Sounds List"
+ *        description: "Get Sounds List API"
+ *        consumes:
+ *        - "application/json"
+ *        produces:
+ *        - "application/json"
+ *        parameters:
+ *        - in: "header"
+ *          name: "token"
+ *          description: "jwt Token"
+ *          required: true
+ *          schema:
+ *            type: string
+ *        - in: "query"
+ *          name: "page"
+ *          schema:
+ *            type: string
+ *        responses:
+ *          200:
+ *            description: "result"
  */

@@ -1,7 +1,7 @@
 
 const { processFileUpload } = require("../../middleware/uploadMiddleware");
 const { getUserByToken } = require("../User/userService");
-const { createSound, removeSound } = require("./soundService");
+const { createSound, removeSound, totalSoundCounts, getPaginatedSounds } = require("./soundService");
 
 const soundController = {
     upload : async (req, res) => {
@@ -43,6 +43,34 @@ const soundController = {
         if(user) {
             const sound = await removeSound({accountId: user._id, soundId : soundId})
             return res.send({sound})
+        }
+    },
+    getSoundList : async (req, res) => {
+        const page = parseInt(req.query.page || '1', 10);
+        const sounds = await getPaginatedSounds(page);
+        const totalCounts = await totalSoundCounts();
+        const lastPage = Math.ceil(totalCounts / 10);
+        const data = { totalCounts, lastPage, sounds };
+        return res.send(data);
+    },
+    getMySoundList: async (req, res) => {
+        try {
+            const token = req.headers.token;
+            const user = await getUserByToken(token);
+    
+            if (user) {
+                const page = parseInt(req.query.page || '1', 10);
+                const sounds = await getPaginatedSounds(page, { accountId: user._id });
+                const totalCounts = await totalSoundCounts();
+                const lastPage = Math.ceil(totalCounts / 10);
+                const data = { totalCounts, lastPage, sounds };
+                return res.send(data);
+            } else {
+                return res.status(401).send("Invalid token or user not found");
+            }
+        } catch (error) {
+            console.log(error)
+            return res.status(500).send("Internal Server Error");
         }
     }
 }

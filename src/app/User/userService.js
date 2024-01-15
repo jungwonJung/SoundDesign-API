@@ -34,12 +34,12 @@ const checkEmail = async ( accountEmail ) => {
 
 const getUserByToken = async (token) => {
   try {
-      const decodedToken = await tokenDecode(token)
+      const decodedToken = await tokenDecode(token);
       if (decodedToken) {
           const user = await User.findOne({ _id: decodedToken._id });
           return user;
       } else {
-          return null;
+          throw new Error("Invalid token");
       }
   } catch (error) {
       throw error;

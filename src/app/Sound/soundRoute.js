@@ -5,9 +5,9 @@ const router = express.Router();
 
 router.post("/sound", audioUpload, soundController.upload)
 
-// router.get("/sound",soundController.getsoundlist)
+router.get("/sound",soundController.getSoundList)
 
-// router.get("/sound/my",soundController.getmysoundlist)
+router.get("/sound/my",soundController.getMySoundList)
 
 router.delete("/sound", soundController.remove)
 
