@@ -1,8 +1,19 @@
 const multer = require('multer');
 const sharp = require('sharp');
-
+const path = require("path")
 const storage = multer.memoryStorage();
-const upload = multer({ storage, limits:{fileSize: 10 * 1024 * 1024} }).single('userImg');
+const soundStorage = multer.diskStorage({
+    destination: function (request, file, cb) {
+        cb(null, 'soundsfiles');
+    },
+    filename: function (requset, file, cb) {
+        const extension = path.extname(file.originalname);
+        cb(null, file.fieldname + '-' + Date.now() + extension);
+    }
+});
+
+const imgUpload = multer({ storage, limits: { fileSize: 10 * 1024 * 1024 } }).single('userImg');
+const audioUpload = multer({ storage: soundStorage }).single('userFile');
 
 const processFileUpload = async (userImg, isSound = true) => {
     if (!userImg) return null;
@@ -14,14 +25,16 @@ const processFileUpload = async (userImg, isSound = true) => {
     const sanitizedFilename = encodedFilename.replace(/[/\\?%*:|"<>]/g, '');
 
     try {
-        const sharpProcess = isSound
-            ? sharp(userImg.buffer).toFile(`./files/${sanitizedFilename}`)
-            : sharp(userImg.buffer)
+        if (isSound) {
+            console.log('Processing sound file...');
+        } else {
+            // 이미지 파일인 경우에는 sharp로 처리
+            await sharp(userImg.buffer)
                 .resize(250, 250)
                 .jpeg({ quality: 100 })
                 .toFile(`./profiles/thumbnail_${sanitizedFilename}`);
-
-        await sharpProcess;
+            console.log('Processing image file...');
+        }
     } catch (err) {
         console.error(`Error processing file:`, err);
     }
@@ -29,4 +42,4 @@ const processFileUpload = async (userImg, isSound = true) => {
     return baseFilePath;
 };
 
-module.exports = { upload, processFileUpload };
+module.exports = { imgUpload,audioUpload, processFileUpload };

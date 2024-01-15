@@ -20,7 +20,7 @@ app.get("/", (req, res) => {
 app.use("/api", require("./src/app/User/userRoute"));
 app.use("/api", require("./src/app/Email/emailRoute"));
 app.use("/api", require("./src/app/Token/tokenRoute"));
-// app.use("/api", require("./routes/sound_routes"));
+app.use("/api", require("./src/app/Sound/soundRoute"));
 // app.use("/api", require("./routes/like_routes"));
 
 app.listen(port, () => {

@@ -203,3 +203,82 @@
  *          200:
  *            description: "[완료]업로드가 성공 되었습니다."
  */
+/**
+ * @swagger
+ *  paths:
+ *    /api/sound:
+ *      post:
+ *        tags:
+ *        - "Sound"
+ *        summary: "File Upload API for Sound"
+ *        description: "파일 업로드시 사용되는 API 입니다."
+ *        consumes:
+ *        - "multipart/form-data"
+ *        produces:
+ *        - "application/json"
+ *        parameters:
+ *        - in: "header"
+ *          name: "token"
+ *          description: "JWT Token"
+ *          required: true
+ *          schema:
+ *            type: string
+ *        requestBody:
+ *          content:
+ *            multipart/form-data:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  userFile:
+ *                    type: string
+ *                    required: true
+ *                    format: binary
+ *                  soundName:
+ *                    type: string
+ *                    required: true
+ *                  category:
+ *                    type: string
+ *                  tags:
+ *                    type: array
+ *                    required: true
+ *                    items:
+ *                      type: string
+ *                    maxItems: 5
+ *        responses:
+ *          200:
+ *            description: "[완료] 업로드가 성공되었습니다."
+ */
+/**
+ * @swagger
+ *  paths:
+ *    /api/sound:
+ *      delete:
+ *        tags:
+ *        - "Sound"
+ *        summary: ""
+ *        description: "내 Sound 삭제 하기 api"
+ *        consumes:
+ *        - "application/json"
+ *        produces:
+ *        - "application/json"
+ *        parameters:
+ *        - in: "header"
+ *          name: "token"
+ *          description: "jwt Token"
+ *          required: true
+ *          schema:
+ *            type: string
+ *        requestBody:
+ *          required: true
+ *          content:
+ *            application/json:
+ *              schema:
+ *                required:
+ *                  - soundId
+ *                properties:
+ *                  soundId:
+ *                    type: string
+ *        responses:
+ *          200:
+ *            description: "[완료] 업로드가 성공 되었습니다."
+ */

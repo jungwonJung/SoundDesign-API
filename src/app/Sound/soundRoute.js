@@ -1,14 +1,15 @@
 const express = require('express');
 const soundController = require('./soundController');
+const { audioUpload } = require('../../middleware/uploadMiddleware');
 const router = express.Router();
 
-router.post("/sound", upload.single('userFile'),soundController.upload)
+router.post("/sound", audioUpload, soundController.upload)
 
 // router.get("/sound",soundController.getsoundlist)
 
 // router.get("/sound/my",soundController.getmysoundlist)
 
-// router.delete("/sound", soundController.remove)
+router.delete("/sound", soundController.remove)
 
 // router.get("/sound/search", soundController.search)
 

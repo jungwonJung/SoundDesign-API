@@ -11,7 +11,13 @@ const createSound = async ({ accountId, soundName, category, tags, fileName, fil
         created: Date.now(),
     });
 
-    return sound.save();
+    return await sound.save();
 };
 
-module.exports = { createSound };
+
+const removeSound = async ({soundId, accountId}) => {
+    return await Sound.findOneAndDelete({accountId: accountId, _id: soundId})
+   
+}
+
+module.exports = { createSound,removeSound };
