@@ -19,6 +19,6 @@ router.delete("/sound", soundController.remove)
 
 // router.get("/sound/like", soundController.mylike)
 
-router.get("/sound/:fileName", soundController.file_path)
+router.get("/sound/:fileName", soundController.filePath)
 
 module.exports = router;
