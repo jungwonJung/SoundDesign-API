@@ -72,7 +72,13 @@ const soundController = {
             console.log(error)
             return res.status(500).send("Internal Server Error");
         }
-    }
+    },
+    filePath: async (req, res) => {
+        const { filename } = req.params;
+        const filePath = path.resolve(__dirname, "../../../soundsfiles/" + filename );
+    
+        return res.sendFile(filePath)
+      }
 }
 
 module.exports = soundController;
