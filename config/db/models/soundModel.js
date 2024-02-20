@@ -27,9 +27,10 @@ const soundSchema = new mongoose.Schema({
     created: {
         type: Number
     },
-    isLiked: {
-        type: Boolean,
-    },
+    likeCount: {
+        type: Number,
+        default: 0 // 기본값 0으로 설정
+    }
 })
 
 mongoose.model("Sound", soundSchema);
