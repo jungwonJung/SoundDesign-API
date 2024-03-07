@@ -332,3 +332,42 @@
  *          200:
  *            description: "result"
  */
+/**
+ * @swagger
+ *  paths:
+ *    /api/like:
+ *      post:
+ *        tags:
+ *        - "Like"
+ *        summary: "Like a sound"
+ *        description: "Like a sound API"
+ *        consumes:
+ *        - "application/json"
+ *        produces:
+ *        - "application/json"
+ *        parameters:
+ *        - in: "header"
+ *          name: "token"
+ *          description: "JWT Token"
+ *          required: true
+ *          schema:
+ *            type: string
+ *        - in: "body"
+ *          name: "soundId"
+ *          description: "ID of the sound to like"
+ *          required: true
+ *          schema:
+ *            type: object
+ *            properties:
+ *              soundId:
+ *                type: string
+ *        responses:
+ *          200:
+ *            description: "[Success] Like action completed successfully"
+ *          400:
+ *            description: "[Error] Bad request"
+ *          401:
+ *            description: "[Error] Unauthorized, token not provided"
+ *          500:
+ *            description: "[Error] Internal server error"
+ */
