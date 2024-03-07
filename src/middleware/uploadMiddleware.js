@@ -20,7 +20,7 @@ const processFileUpload = async (userImg, isSound = true) => {
 
     const filename = userImg.originalname;
     const encodedFilename = encodeURIComponent(filename);
-    const baseFilePath = `http://localhost:3000/api/${isSound ? 'sound/file' : 'user/profile/img/thumbnail'}_${encodedFilename}`;
+    const baseFilePath = `https://sdesign-api-jayganzi.koyeb.app//api/${isSound ? 'sound/file' : 'user/profile/img/thumbnail'}_${encodedFilename}`;
     
     const sanitizedFilename = encodedFilename.replace(/[/\\?%*:|"<>]/g, '');
 
