@@ -16,7 +16,7 @@ const sendVerificationEmail = (toEmail) => {
     subject: "Please verify your email",
     html:
       "<p>Please click the link below to authenticate</p>" +
-      "<a href='https://sdesign-api-jayganzi.koyeb.app//api/email/confirm" +
+      "<a href='https://sdesign-api-jayganzi.koyeb.app/api/email/confirm" +
       "?email=" +
       toEmail +
       " '>Verify</a>",
