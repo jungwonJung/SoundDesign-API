@@ -6,7 +6,7 @@ const cors = require("cors");
 
 const app = express();
 const { mongoDB } = require("./config/db/db.js");
-const port = 3000;
+const port = process.env.PORT;
 
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
