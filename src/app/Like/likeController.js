@@ -1,4 +1,4 @@
-const { likeService } = require("../services/likeService");
+const { likeService } = require("../Like/likeService");
 
 const likeController = {
     like: async (req, res) => {
@@ -14,4 +14,4 @@ const likeController = {
     }
 }
 
-module.exports = { likeController };
+module.exports =  {likeController} 

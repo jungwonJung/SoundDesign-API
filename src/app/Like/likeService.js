@@ -29,4 +29,4 @@ const likeService = {
     }
 }
 
-module.exports = { likeService };
+module.exports = {likeService}
